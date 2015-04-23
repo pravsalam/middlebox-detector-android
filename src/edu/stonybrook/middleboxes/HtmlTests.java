@@ -67,7 +67,7 @@ public class HtmlTests extends AsyncTask<Object, Void, Map>{
         }
         String url = "http://";
         url += server + ":8080/?" + "unique_id=" + androidID + "&network_operator=" + networkOperator;
-        url +="&local_ip="+local_ip;
+        //url +="&local_ip="+local_ip;
         Log.i("INFO", url);
         int headertest = headerTests(url);
         int http404test = http404Test(url);
@@ -75,29 +75,28 @@ public class HtmlTests extends AsyncTask<Object, Void, Map>{
         Map testResuls = new HashMap();
         Log.i("INFO",  (new Integer(headertest)).toString());
         if (headertest == HTTP_MOD_YES)
-            testResuls.put("Header Modified","Yes");
+            testResuls.put("HeaderModified","Yes");
         else if(headertest == HTTP_MOD_NO)
         {
-        	Log.i("INFO",  "why not come here");
-            testResuls.put("Header Modified","No");
+            testResuls.put("HeaderModified","No");
         }
         else
-            testResuls.put("Header Modified","Internal Error");
+            testResuls.put("HeaderModified","Internal Error");
         
         Log.i("INFO",  (new Integer(http404test)).toString());
         if(http404test == HTTP_404_MOD)
             testResuls.put("Http 404 Modified","Yes");
         else if(http404test == HTTP_404_NOT_MOD)
-            testResuls.put("Http 404 Modified","No");
+            testResuls.put("Http404","No");
         else
-            testResuls.put("Http 404 Modified","Internal Error");
+            testResuls.put("Http404","Internal Error");
         
         if (hostModTest == HTTP_HOST_OK)
-            testResuls.put("Header Host test","Reached our server");
+            testResuls.put("HeaderHost","yes");
         else if(hostModTest == HTTP_HOST_NOT_OK)
-            testResuls.put("Header Host test","Reached google");
+            testResuls.put("HeaderHost","no");
         else
-            testResuls.put("Header Host test","Internal Error");
+            testResuls.put("HeaderHost","Internal Error");
         return testResuls;
 
     }
@@ -191,7 +190,7 @@ public class HtmlTests extends AsyncTask<Object, Void, Map>{
             HttpURLConnection httpCon = (HttpURLConnection) urlObj.openConnection();
             httpCon.setRequestMethod("GET");
             httpCon.setRequestProperty("User-Agent", USER_AGENT);
-            httpCon.setRequestProperty("Host", "www.google.com");
+            httpCon.setRequestProperty("Host", "www.yahoo.com");
             httpCon.setRequestProperty("Accept","*/*");
             httpCon.setRequestProperty("Test-Type","HeaderHostTest");
             httpCon.setConnectTimeout(1500);
@@ -223,6 +222,4 @@ public class HtmlTests extends AsyncTask<Object, Void, Map>{
             return ErrorConstants.INTERNAL_ERROR;
         }	
     }
-
-
 }

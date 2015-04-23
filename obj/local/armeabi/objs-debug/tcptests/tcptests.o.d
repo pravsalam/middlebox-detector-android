@@ -94,8 +94,7 @@ obj/local/armeabi/objs-debug/tcptests/tcptests.o: jni/tcptests.cpp \
  /Users/praveenkumaralam/Downloads/android-ndk-r10d/platforms/android-21/arch-arm/usr/include/net/if.h \
  /Users/praveenkumaralam/Downloads/android-ndk-r10d/platforms/android-21/arch-arm/usr/include/linux/if.h \
  /Users/praveenkumaralam/Downloads/android-ndk-r10d/platforms/android-21/arch-arm/usr/include/linux/hdlc/ioctl.h \
- jni/edu_stonybrook_middleboxes_TcpTests.h \
- /Users/praveenkumaralam/Downloads/android-ndk-r10d/platforms/android-21/arch-arm/usr/include/jni.h
+ /Users/praveenkumaralam/Downloads/android-ndk-r10d/platforms/android-21/arch-arm/usr/include/android/log.h
 
 /Users/praveenkumaralam/Downloads/android-ndk-r10d/platforms/android-21/arch-arm/usr/include/stdio.h:
 
@@ -287,6 +286,4 @@ obj/local/armeabi/objs-debug/tcptests/tcptests.o: jni/tcptests.cpp \
 
 /Users/praveenkumaralam/Downloads/android-ndk-r10d/platforms/android-21/arch-arm/usr/include/linux/hdlc/ioctl.h:
 
-jni/edu_stonybrook_middleboxes_TcpTests.h:
-
-/Users/praveenkumaralam/Downloads/android-ndk-r10d/platforms/android-21/arch-arm/usr/include/jni.h:
+/Users/praveenkumaralam/Downloads/android-ndk-r10d/platforms/android-21/arch-arm/usr/include/android/log.h:

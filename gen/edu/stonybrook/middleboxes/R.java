@@ -476,10 +476,11 @@ containing a value of this type.
         public static final int powered_by_google_light=0x7f020020;
     }
     public static final class id {
-        public static final int action_settings=0x7f0b001a;
+        public static final int action_settings=0x7f0b001b;
         public static final int adjust_height=0x7f0b0000;
         public static final int adjust_width=0x7f0b0001;
         public static final int book_now=0x7f0b0010;
+        public static final int button_bar=0x7f0b0018;
         public static final int buyButton=0x7f0b000c;
         public static final int buy_now=0x7f0b0011;
         public static final int buy_with_google=0x7f0b0012;
@@ -490,16 +491,16 @@ containing a value of this type.
         public static final int holo_light=0x7f0b0008;
         public static final int hybrid=0x7f0b0003;
         public static final int match_parent=0x7f0b000e;
-        public static final int middleboxes=0x7f0b0018;
         public static final int monochrome=0x7f0b0016;
         public static final int none=0x7f0b0002;
         public static final int normal=0x7f0b0004;
         public static final int production=0x7f0b0009;
-        public static final int resultsScreen=0x7f0b0019;
+        public static final int resultConsole=0x7f0b001a;
         public static final int sandbox=0x7f0b000a;
         public static final int satellite=0x7f0b0005;
         public static final int selectionDetails=0x7f0b000d;
         public static final int slide=0x7f0b0017;
+        public static final int start_measurement=0x7f0b0019;
         public static final int strict_sandbox=0x7f0b000b;
         public static final int terrain=0x7f0b0006;
         public static final int wrap_content=0x7f0b000f;
@@ -509,6 +510,7 @@ containing a value of this type.
     }
     public static final class layout {
         public static final int activity_main=0x7f030000;
+        public static final int list_item=0x7f030001;
     }
     public static final class menu {
         public static final int main=0x7f0a0000;
@@ -631,6 +633,7 @@ containing a value of this type.
         public static final int commono_google_play_services_api_unavailable_text=0x7f060022;
         public static final int create_calendar_message=0x7f060005;
         public static final int create_calendar_title=0x7f060004;
+        public static final int dataColPort=0x7f060031;
         public static final int decline=0x7f060003;
         public static final int edit_message=0x7f06002b;
         public static final int hello_world=0x7f060029;
@@ -638,6 +641,7 @@ containing a value of this type.
         public static final int run_test=0x7f06002c;
         public static final int scheduler_priority=0x7f060027;
         public static final int scheduler_version_name=0x7f060026;
+        public static final int serverip=0x7f060030;
         public static final int store_picture_message=0x7f060001;
         public static final int store_picture_title=0x7f060000;
         public static final int sys_info=0x7f06002d;

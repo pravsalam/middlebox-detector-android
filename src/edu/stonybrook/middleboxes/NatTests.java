@@ -29,6 +29,7 @@ public class NatTests extends AsyncTask<Object, Void, Map>{
     final String USER_AGENT = "TEST";
     private String local_ip="";
     private String publicIp="";
+    private String public_ip_port80="";
     private int publicPort=0;
     private int NAT_PROXY_YES = 1;
     private int NAT_PROXY_NO = 2;
@@ -60,22 +61,37 @@ public class NatTests extends AsyncTask<Object, Void, Map>{
         }
         String url = "http://";
         url += server + ":8080/?" + "unique_id=" + androidID + "&network_operator=" + networkOperator;
-        url +="&local_ip="+local_ip;
+        //url +="&local_ip="+local_ip;
         Log.i("INFO", url);
         int natProxy = runNatTest(url);
+        
+        String url_port80 = "http://"+server+":80";
+        int flipTestResult = runIpFlipTest(url_port80);
         Map testResults  = new HashMap();
         if(natProxy == NAT_PROXY_YES )
         {
-            testResults.put("NAT Proxy Present","Yes");
-            testResults.put("Device local IP",local_ip);
-            testResults.put("Device public IP",publicIp);
+            testResults.put("NATProxy","Yes");
+            testResults.put("Device_local_IP",local_ip);
+            testResults.put("Device_public_IP",publicIp);
         }
         else if(natProxy == NAT_PROXY_NO)
         {
-            testResults.put("NAT Proxy Present","No");
+            testResults.put("NATProxy","No");
         }
         else
-            testResults.put("NAT Proxy Present","Internal Error");
+            testResults.put("NATProxy","Internal Error");
+        if(flipTestResult == ErrorConstants.SUCCESS)
+        {
+        	if(publicIp.equals(public_ip_port80))
+        	{
+        		testResults.put("IpFlipping","No");
+        	}
+        	else
+        		testResults.put("IpFlipping","Yes");
+        }
+        else{
+        	testResults.put("IpFlipping ", "Internal Error");
+        }
         return testResults;
     }
     private int runNatTest(String url) {
@@ -120,6 +136,41 @@ public class NatTests extends AsyncTask<Object, Void, Map>{
                 e.printStackTrace();
                 return ErrorConstants.INTERNAL_ERROR;
             }
+        } catch (IOException e) {
+            //malformed URL do nothing
+
+            Log.i("INFO", e.getLocalizedMessage());
+            return ErrorConstants.INTERNAL_ERROR;
+        }
+    }
+    
+    private int runIpFlipTest(String url) {
+        try {
+            URL urlObj = new URL(url);
+            HttpURLConnection httpCon = (HttpURLConnection) urlObj.openConnection();
+            httpCon.setRequestMethod("GET");
+            httpCon.setRequestProperty("User-Agent", USER_AGENT);
+            httpCon.setRequestProperty("Accept", "*/*");
+            httpCon.setConnectTimeout(2400);
+
+            int responseCode = httpCon.getResponseCode();
+            Integer code = responseCode;
+            Log.i("INFO", code.toString());
+            BufferedReader in = new BufferedReader(
+                    new InputStreamReader(httpCon.getInputStream()));
+            String inputLine;
+            StringBuffer response = new StringBuffer();
+            Map<String, List<String>> map = httpCon.getHeaderFields();
+            for (Map.Entry<String, List<String>> entry : map.entrySet()) {
+                Log.i("INFO", entry.getKey() + " : " + entry.getValue());
+            }
+
+            if ((inputLine = in.readLine()) != null) {
+                public_ip_port80 = inputLine;
+            }
+            in.close();
+            httpCon.disconnect();
+            return ErrorConstants.SUCCESS;
         } catch (IOException e) {
             //malformed URL do nothing
 

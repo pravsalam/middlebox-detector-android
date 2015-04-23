@@ -1,22 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="horizontal"
-    android:id="@+id/middleboxes"
-    android:gravity="center_horizontal">
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:hint="@string/run_test"
-        android:onClick="runAllTests" />
-    <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_gravity="center"
-        android:id="@+id/resultsScreen"
-        android:layout_marginTop="100dp" />
-
+  android:orientation="vertical" android:layout_width="fill_parent"
+  android:layout_height="fill_parent">
+  <TableLayout android:id="@+id/button_bar"
+      android:layout_height="wrap_content" 
+      android:layout_width="fill_parent">
+    <TableRow 
+        android:gravity="center" 
+        android:layout_width="wrap_content" 
+        android:layout_height="wrap_content">
+      <Button 
+          android:id="@+id/start_measurement"
+          android:layout_width="wrap_content" 
+          android:layout_height="wrap_content"
+          android:hint="@string/run_test"
+          android:onClick="runAllTests" /> />
+    </TableRow>
+  </TableLayout>
+    <ListView
+      android:layout_width="fill_parent"
+      android:layout_height="fill_parent"
+      android:id="@+id/resultConsole"
+      android:scrollbars="vertical"
+      android:textColor="#000000"/>
 </LinearLayout>

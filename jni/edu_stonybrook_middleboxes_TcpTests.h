@@ -10,10 +10,10 @@ extern "C" {
 /*
  * Class:     edu_stonybrook_middleboxes_TcpTests
  * Method:    tcpResetTest
- * Signature: ()Ljava/lang/String;
+ * Signature: (Ljava/lang/String;Ljava/lang/String;I)Ljava/lang/String;
  */
 JNIEXPORT jstring JNICALL Java_edu_stonybrook_middleboxes_TcpTests_tcpResetTest
-  (JNIEnv *, jobject);
+  (JNIEnv *, jobject, jstring, jstring, jint);
 
 #ifdef __cplusplus
 }

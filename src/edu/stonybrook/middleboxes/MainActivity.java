@@ -5,19 +5,40 @@ import java.util.Iterator;
 import java.util.Map;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
+import com.mobilyzer.MeasurementResult;
+import com.mobilyzer.MeasurementScheduler.DataUsageProfile;
+import com.mobilyzer.MeasurementScheduler.TaskStatus;
+import com.mobilyzer.MeasurementTask;
+import com.mobilyzer.UpdateIntent;
+import com.mobilyzer.api.API;
+import com.mobilyzer.exceptions.MeasurementError;
+
 public class MainActivity extends Activity {
-	private String server="54.68.198.93";
+	private String server="54.187.128.15";
+	private API api;
+	private BroadcastReceiver broadcastReceiver;
+	private String clientKey;
+	private ListView consoleView;
+	private ArrayAdapter<String> resultList;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		this.consoleView = (ListView) this.findViewById(R.id.resultConsole);
+	    this.resultList = new ArrayAdapter<String>(getApplicationContext(),
+	        R.layout.list_item);
+	    this.consoleView.setAdapter(this.resultList);
+	    resultList.clear();
 	}
 
 	@Override
@@ -46,14 +67,18 @@ public class MainActivity extends Activity {
         String outputStr="";
         HtmlTests htmltester = new HtmlTests();
         NatTests natTester = new NatTests();
-        TcpConnectionTests tcpTester = new TcpConnectionTests();
+        UploadResults resUploader = new UploadResults();
+        TcpTests tcpTester = new TcpTests();
+        TcpConnectionTests tcpConnTester = new TcpConnectionTests();
         try {
             Map htmlTests = htmltester.execute(view, server).get();
             Map natTests = natTester.execute(view, server).get();
-            Boolean tcpTests = tcpTester.execute(view, server).get();
+            Boolean tcpTests = tcpConnTester.execute(view, server).get();
+            tcpTester.execute(view, server).get();
             allResults.putAll(htmlTests);
             allResults.putAll(natTests);
-            TextView resultPane = (TextView)findViewById(R.id.resultsScreen);
+            allResults.put("TCP_RST", tcpTests.toString());
+            //TextView resultPane = (TextView)findViewById(R.id.resultsScreen);
             Iterator iter = allResults.keySet().iterator();
             while(iter.hasNext()){
                 Object key = iter.next();
@@ -61,19 +86,27 @@ public class MainActivity extends Activity {
                 if(!((String)value).equals("Internal Error"))
                     allTestsFailed = false;
                 outputStr +=(String)key+" : "+(String)value+"\n";
-                Log.i("INFO", outputStr);
+                //Log.i("INFO", outputStr);
             }
-            outputStr +="TCP RST test: "+tcpTests.toString();
+            //outputStr +="TCP RST test: "+tcpTests.toString();
             if(!allTestsFailed)
-                resultPane.setText(outputStr);
+            {
+                resultList.insert(outputStr,0);
+                // upload result to server
+                Log.i("INFO",outputStr);
+                resUploader.execute(view, server, allResults);
+            }
             else
-                resultPane.setText("Check your Internet Connection");
+                resultList.insert("Check your Internet Connection",0);
+            Log.i("INFO", "Whats with new layout");
         }catch(Exception e)
         {
             //do Nothing
             e.printStackTrace();
             Log.i("INFO", "Internal Error Occurred");
         }
-
+        runOnUiThread(new Runnable() {
+            public void run() { resultList.notifyDataSetChanged(); }
+          });
     }
 }

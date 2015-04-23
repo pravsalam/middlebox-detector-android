@@ -5,4 +5,5 @@ package edu.stonybrook.middleboxes;
  */
 public class ErrorConstants {
     static final int INTERNAL_ERROR = -1;
+    static final int SUCCESS = 1;
 }
