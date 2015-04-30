@@ -8,6 +8,7 @@ import android.content.Context;
 import android.os.StrictMode;
 import android.provider.Settings;
 import android.telephony.TelephonyManager;
+import android.text.format.Formatter;
 import android.util.Log;
 import android.view.View;
 import android.app.FragmentManager;
@@ -57,7 +58,9 @@ public class HtmlTests extends AsyncTask<Object, Void, Map>{
                              enumIpAddr = intf.getInetAddresses();enumIpAddr.hasMoreElements();) {
                     InetAddress inetAddress = enumIpAddr.nextElement();
                     if (!inetAddress.isLoopbackAddress())
-                    { local_ip = inetAddress.getHostAddress().toString(); }
+                    { 
+                    	local_ip = Formatter.formatIpAddress(inetAddress.hashCode());
+                    }
                 }
             }
         }
@@ -67,7 +70,7 @@ public class HtmlTests extends AsyncTask<Object, Void, Map>{
         }
         String url = "http://";
         url += server + ":8080/?" + "unique_id=" + androidID + "&network_operator=" + networkOperator;
-        //url +="&local_ip="+local_ip;
+        url +="&local_ip="+local_ip;
         Log.i("INFO", url);
         int headertest = headerTests(url);
         int http404test = http404Test(url);

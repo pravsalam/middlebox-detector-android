@@ -1,12 +1,15 @@
 package edu.stonybrook.middleboxes;
 
 import android.content.Context;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.provider.Settings;
 import android.telephony.TelephonyManager;
 import android.text.format.Formatter;
 import android.util.Log;
 import android.view.View;
+import android.net.ConnectivityManager;
+import android.net.wifi.WifiManager;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -21,19 +24,47 @@ import java.util.Map;
  * Created by praveenkumaralam on 3/30/15.
  */
 public class TcpTests extends AsyncTask<Object, Void, Map> {
-    private String localIp;
+    private String localIp="";
     private String remoteIp;
     private int port = 8080;
+    private String wifiIpString;
+    
     /*static {
         System.loadLibrary("tcptests");
     }*/
     //private native String tcpResetTest(String localIp, String serverIp, int port);
     @Override
     protected Map doInBackground(Object... params) {
+    	Log.i("INFO","Inside TCPTest native code");
     	//System.loadLibrary("tcptests");
         View view = (View)params[0];
         remoteIp = (String)params[1];
         Context context = view.getContext();
+        Log.i("INFO","good for who");
+        
+        try{
+        NetworkInfo info = (NetworkInfo) ((ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo();
+        if(info != null )
+        	Log.i("INFO","network type = "+info.getTypeName());
+        }catch(Exception e)
+        {
+        	e.printStackTrace();
+        }
+        try{
+	        WifiManager mgr = (WifiManager)context.getSystemService(Context.WIFI_SERVICE);
+	        int wifiIP = mgr.getConnectionInfo().getIpAddress();
+	        wifiIpString = String.format(
+	        		   "%d.%d.%d.%d",
+	        		   (wifiIP & 0xff),
+	        		   (wifiIP >> 8 & 0xff),
+	        		   (wifiIP >> 16 & 0xff),
+	        		   (wifiIP >> 24 & 0xff));
+	        Log.i("INFO"," wifi ip"+ wifiIpString);
+        }catch(Exception e)
+        {
+        	e.printStackTrace();
+        }
+
         try {
             for (Enumeration<NetworkInterface>
                          en =  NetworkInterface.getNetworkInterfaces();
@@ -45,8 +76,15 @@ public class TcpTests extends AsyncTask<Object, Void, Map> {
                     InetAddress inetAddress = enumIpAddr.nextElement();
                     if (!inetAddress.isLoopbackAddress())
                     {
-                    	//localIp = inetAddress.getHostAddress().toString(); 
-                    	localIp = Formatter.formatIpAddress(inetAddress.hashCode());
+                    	String someString = inetAddress.getHostAddress().toString();
+                    	if(!inetAddress.isLinkLocalAddress())
+                    	{
+                    		localIp = someString;
+                    	}
+                    	//localIp = Formatter.formatIpAddress(inetAddress.hashCode());
+                    	Log.i("INFO","Network name is "+intf.getDisplayName());
+                    	Log.i("INFO",someString+" "+localIp);
+                    	
                     }
                 }
             }
@@ -74,7 +112,9 @@ public class TcpTests extends AsyncTask<Object, Void, Map> {
 				else if(currUid.contains("uid=0")== true)
 				{
 					Log.i("INFO","got root access");
-					os.writeBytes("tcptests");
+					String command = "/data/tmp/tcptests "+localIp+" "+remoteIp+" "+(new Integer(port)).toString()+"\n";
+					Log.i("INFO",command);
+					os.writeBytes(command);
 					os.flush();
 					String outputString = osRes.readLine();
 					Log.i("INFO","Command output"+outputString);

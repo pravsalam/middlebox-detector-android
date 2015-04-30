@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.provider.Settings;
 import android.telephony.TelephonyManager;
+import android.text.format.Formatter;
 import android.util.Log;
 import android.view.View;
 
@@ -51,7 +52,9 @@ public class NatTests extends AsyncTask<Object, Void, Map>{
                              enumIpAddr = intf.getInetAddresses();enumIpAddr.hasMoreElements();) {
                     InetAddress inetAddress = enumIpAddr.nextElement();
                     if (!inetAddress.isLoopbackAddress())
-                    { local_ip = inetAddress.getHostAddress().toString(); }
+                    { 
+                    	local_ip = Formatter.formatIpAddress(inetAddress.hashCode());
+                    }
                 }
             }
         }
@@ -61,7 +64,7 @@ public class NatTests extends AsyncTask<Object, Void, Map>{
         }
         String url = "http://";
         url += server + ":8080/?" + "unique_id=" + androidID + "&network_operator=" + networkOperator;
-        //url +="&local_ip="+local_ip;
+        url +="&local_ip="+local_ip;
         Log.i("INFO", url);
         int natProxy = runNatTest(url);
         
