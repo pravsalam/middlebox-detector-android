@@ -23,10 +23,10 @@ import java.util.Map;
 /**
  * Created by praveenkumaralam on 3/30/15.
  */
-public class TcpTests extends AsyncTask<Object, Void, Map> {
+public class TcpTests extends AsyncTask<Object, Void, String> {
     private String localIp="";
     private String remoteIp;
-    private int port = 8080;
+    private int port = 80;
     private String wifiIpString;
     
     /*static {
@@ -34,13 +34,15 @@ public class TcpTests extends AsyncTask<Object, Void, Map> {
     }*/
     //private native String tcpResetTest(String localIp, String serverIp, int port);
     @Override
-    protected Map doInBackground(Object... params) {
+    protected String doInBackground(Object... params) {
     	Log.i("INFO","Inside TCPTest native code");
     	//System.loadLibrary("tcptests");
         View view = (View)params[0];
-        remoteIp = (String)params[1];
+        //remoteIp = (String)params[1];
+        remoteIp = "173.194.123.80";
         Context context = view.getContext();
         Log.i("INFO","good for who");
+        String outputString  = "Internal Error";
         
         try{
         NetworkInfo info = (NetworkInfo) ((ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo();
@@ -92,7 +94,7 @@ public class TcpTests extends AsyncTask<Object, Void, Map> {
         catch (SocketException ex)
         {
             Log.e("ServerActivity", ex.toString());
-            return null;
+            return outputString;
         }
         Log.i("INFO","localIp= "+localIp);
         try {
@@ -107,7 +109,7 @@ public class TcpTests extends AsyncTask<Object, Void, Map> {
 				if(currUid == null)
 				{
 					Log.i("INFO","could't get root");
-					return null;
+					return outputString;
 				}
 				else if(currUid.contains("uid=0")== true)
 				{
@@ -116,7 +118,7 @@ public class TcpTests extends AsyncTask<Object, Void, Map> {
 					Log.i("INFO",command);
 					os.writeBytes(command);
 					os.flush();
-					String outputString = osRes.readLine();
+					 outputString = osRes.readLine();
 					Log.i("INFO","Command output"+outputString);
 				}
 			}
@@ -130,6 +132,6 @@ public class TcpTests extends AsyncTask<Object, Void, Map> {
 		}
         //String ente = tcpResetTest(localIp, remoteIp, port);
         Log.i("INFO", "exiting tcptests.java");
-     return null;
+     return outputString;
     }
 }

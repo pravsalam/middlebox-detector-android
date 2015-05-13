@@ -75,6 +75,8 @@ obj/local/armeabi/objs-debug/tcptests/tcptests.o: jni/tcptests.cpp \
  /Users/praveenkumaralam/Downloads/android-ndk-r10d/platforms/android-21/arch-arm/usr/include/linux/ipv6.h \
  /Users/praveenkumaralam/Downloads/android-ndk-r10d/platforms/android-21/arch-arm/usr/include/netinet/ip.h \
  /Users/praveenkumaralam/Downloads/android-ndk-r10d/platforms/android-21/arch-arm/usr/include/netinet/in_systm.h \
+ /Users/praveenkumaralam/Downloads/android-ndk-r10d/platforms/android-21/arch-arm/usr/include/netinet/tcp.h \
+ /Users/praveenkumaralam/Downloads/android-ndk-r10d/platforms/android-21/arch-arm/usr/include/linux/tcp.h \
  /Users/praveenkumaralam/Downloads/android-ndk-r10d/platforms/android-21/arch-arm/usr/include/netinet/udp.h \
  /Users/praveenkumaralam/Downloads/android-ndk-r10d/platforms/android-21/arch-arm/usr/include/netinet/ip_icmp.h \
  /Users/praveenkumaralam/Downloads/android-ndk-r10d/platforms/android-21/arch-arm/usr/include/arpa/inet.h \
@@ -246,6 +248,10 @@ obj/local/armeabi/objs-debug/tcptests/tcptests.o: jni/tcptests.cpp \
 /Users/praveenkumaralam/Downloads/android-ndk-r10d/platforms/android-21/arch-arm/usr/include/netinet/ip.h:
 
 /Users/praveenkumaralam/Downloads/android-ndk-r10d/platforms/android-21/arch-arm/usr/include/netinet/in_systm.h:
+
+/Users/praveenkumaralam/Downloads/android-ndk-r10d/platforms/android-21/arch-arm/usr/include/netinet/tcp.h:
+
+/Users/praveenkumaralam/Downloads/android-ndk-r10d/platforms/android-21/arch-arm/usr/include/linux/tcp.h:
 
 /Users/praveenkumaralam/Downloads/android-ndk-r10d/platforms/android-21/arch-arm/usr/include/netinet/udp.h:
 

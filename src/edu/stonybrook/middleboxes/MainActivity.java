@@ -74,10 +74,11 @@ public class MainActivity extends Activity {
             Map htmlTests = htmltester.execute(view, server).get();
             Map natTests = natTester.execute(view, server).get();
             Boolean tcpTests = tcpConnTester.execute(view, server).get();
-            tcpTester.execute(view, server).get();
+            String ttlLoc = tcpTester.execute(view, server).get();
             allResults.putAll(htmlTests);
             allResults.putAll(natTests);
             allResults.put("TCP_RST", tcpTests.toString());
+            allResults.put("TTL loc",ttlLoc);
             //TextView resultPane = (TextView)findViewById(R.id.resultsScreen);
             Iterator iter = allResults.keySet().iterator();
             while(iter.hasNext()){

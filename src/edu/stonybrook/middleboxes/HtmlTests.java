@@ -47,7 +47,7 @@ public class HtmlTests extends AsyncTask<Object, Void, Map>{
         Context context = view.getContext();
         String androidID = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
         TelephonyManager manager = (TelephonyManager) context.getSystemService(context.TELEPHONY_SERVICE);
-        String networkOperator = manager.getNetworkOperatorName();
+        String networkOperator = manager.getNetworkOperatorName().replaceAll("\\s","");
         try {
             for (Enumeration<NetworkInterface>
                          en =  NetworkInterface.getNetworkInterfaces();
@@ -59,7 +59,11 @@ public class HtmlTests extends AsyncTask<Object, Void, Map>{
                     InetAddress inetAddress = enumIpAddr.nextElement();
                     if (!inetAddress.isLoopbackAddress())
                     { 
-                    	local_ip = Formatter.formatIpAddress(inetAddress.hashCode());
+                    	String someString = inetAddress.getHostAddress().toString();
+                    	if(!inetAddress.isLinkLocalAddress())
+                    	{
+                    		local_ip = someString;
+                    	}
                     }
                 }
             }
