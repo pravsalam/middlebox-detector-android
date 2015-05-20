@@ -24,7 +24,7 @@ import com.mobilyzer.api.API;
 import com.mobilyzer.exceptions.MeasurementError;
 
 public class MainActivity extends Activity {
-	private String server="54.187.128.15";
+	private String server="52.25.176.10";
 	private API api;
 	private BroadcastReceiver broadcastReceiver;
 	private String clientKey;

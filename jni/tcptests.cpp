@@ -91,6 +91,8 @@ int main(int argc, char **argv)
     //fill the IP Header
     while(iteration < max_iters)
     {
+    	int tcp_seqnumber=0;
+    	int middlebox_ttl=0;
     		ready_to_read = 0;
     		iphdr.ip_v = 4;
     	    iphdr.ip_len = IP4_HDRLEN+ TCP_HDRLEN;
@@ -115,6 +117,7 @@ int main(int argc, char **argv)
     	    tcph.source = htons(12000);
     	    tcph.dest = htons(destPort);
     	    tcph.seq = htons(0);
+    	    tcp_seqnumber = tcph.seq;
     	    tcph.ack_seq = htons(0);
 	        //tcph.th_x2 = 0;
     	    tcph.res1 = 0;
@@ -156,14 +159,14 @@ int main(int argc, char **argv)
     	    ready_to_read = select(maxfd+1, &descset, NULL, NULL, &timeout);
     	    if(ready_to_read)
     	    {
-	    	printf("something available\n");
+	    	//printf("something available\n");
     	    	if(FD_ISSET(tcp_sd,&descset))
     	    	{
     	    		//printf("reached server\n");
 			int tcprcvd = recvfrom(tcp_sd, recvbuffer, 1024, 0, (struct sockaddr*)&cliaddr, &socklen);
 			struct ip *riph = (struct ip *)(recvbuffer);
 			char *srcip = inet_ntoa(riph->ip_src);
-			printf("tcp sourec ip =%s targetip %s", srcip,target_ip);
+			//printf("tcp sourec ip =%s targetip %s", srcip,target_ip);
 			if(!strcmp(target_ip, srcip))
 			{
 				printf(" reached target server at ttl = %d\n",iteration);
@@ -175,11 +178,25 @@ int main(int argc, char **argv)
     	    	{
 					int rcvd = recvfrom(icmp_sd,recvbuffer, 1024, 0, (struct sockaddr*)&cliaddr,  &socklen);
 					rcviphdr = (struct ip *) (recvbuffer);
-					printf(" source ip = %s",inet_ntoa(rcviphdr->ip_src));
-					printf("dest ip = %s",inet_ntoa(rcviphdr->ip_dst));
-					printf(" got something\n");
+					//printf(" source ip = %s",inet_ntoa(rcviphdr->ip_src));
+					//printf("dest ip = %s",inet_ntoa(rcviphdr->ip_dst));
+					//printf(" got something\n");
 					struct icmp *icmph = (struct icmp*)(recvbuffer+IP4_HDRLEN);
-					printf("icmp code = %d type =%d\n", icmph->icmp_code, icmph->icmp_type);
+					struct ip icmpiphdr = icmph->icmp_ip;
+					struct tcphdr *icmptcph  = (struct tcphdr*)(recvbuffer+IP4_HDRLEN+8+IP4_HDRLEN);
+
+					//printf(" icmp ip options %d\n",icmpiphdr.ip_ttl);
+					//printf(" Tcp seq number = %d",icmptcph->seq);
+					int reply_tcpseqnumber = icmptcph->seq;
+					int icmp_src_port = ntohl(icmptcph->source);
+					if(reply_tcpseqnumber != tcp_seqnumber || icmp_src_port != 12000)
+					{
+						middlebox_ttl = iteration;
+						printf("Middlebox could be before hop count %d\n",middlebox_ttl);
+						return 0;
+					}
+
+					//printf("icmp code = %d type =%d\n", icmph->icmp_code, icmph->icmp_type);
     	    	}
     	    }
     	    else
@@ -288,7 +305,6 @@ tcp4_checksum (struct ip iphdr, struct tcphdr tcphdr)
     for (i=0; i<8; i++) {
       th_flags += (tcp_flags[i] << i);
     }
-    printf(" th_flags = %c",th_flags);
 
 
     // Copy TCP flags to buf (8 bits)

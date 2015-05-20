@@ -181,7 +181,7 @@ public class NatTests extends AsyncTask<Object, Void, Map>{
         } catch (IOException e) {
             //malformed URL do nothing
 
-            Log.i("INFO", e.getLocalizedMessage());
+            Log.i("INFO", "Error"+e.getLocalizedMessage());
             return ErrorConstants.INTERNAL_ERROR;
         }
     }
